@@ -3,7 +3,7 @@ set -e
 
 rm -f server
 
-as -o server.o main.s
+as -o server.o asmhttp.s
 ld -s -n --no-warn-rwx-segments -z noexecstack -o server server.o
 
 # Strip leftover metadata and GNU note sections
