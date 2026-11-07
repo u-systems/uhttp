@@ -6,7 +6,7 @@
 
 A bare-metal, zero-dependency, zero-copy, no-AI-slop, highly concurrent HTTP/1.1 framework written in pure x86-64 assembly for Linux. No libc, no runtime, no bloated dependencies. Just direct syscalls, raw registers, and maximum hardware efficiency.
 
-Originally conceived as a pure deep-dive exercise in x86-64 assembly, **µHTTP** has evolved into the foundational networking layer for [µSystems](https://github.com/u-systems) and will serve as the production HTTP engine under the hood of [uShield](https://github.com/u-systems/ushield).
+Originally conceived as a pure deep-dive exercise in x86-64 assembly, **µHTTP** has evolved into the foundational networking layer for [µSystems](https://github.com/u-systems) and will serve as the production HTTP engine under the hood of [µShield](https://github.com/u-systems/ushield).
 
 ---
 
