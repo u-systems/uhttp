@@ -926,7 +926,7 @@ worker_event_loop:
     # 5. Send headers with exact Content-Length, then stream the file
     HTTP_ALLOC
     HTTP_WRITE_STATUS_LINE 200, 11
-    HTTP_WRITE_HEADER_KV "Server", "asmhttp"
+    HTTP_WRITE_HEADER_KV "Server", "uhttp"
     HTTP_WRITE_HEADER_KV "Content-Type", "text/plain"
     HTTP_SEND_FILE r13, r12, r14
     HTTP_DEALLOC
@@ -1055,7 +1055,7 @@ claim_slot:
 
     tzcnt rdx, rax                      # rdx = index of first available free bit (0..63)
 
-    # Because asmhttp runs multi-core and not multi-threaded,
+    # Because uhttp runs multi-core and not multi-threaded,
     # we don't need any atomic operations!
 
     bts rax, rdx                        # 1 cycle: mark slot busy in register

@@ -15,9 +15,9 @@ if [ ! -f "$CSV_FILE" ]; then
     echo "timestamp,version,target,requests_per_sec,latency_avg_ms" > "$CSV_FILE"
 fi
 
-echo "==> Building asmhttp library..."
-as -o "$BENCH_DIR/asmhttp.o" "$ROOT_DIR/asmhttp.s"
-ar rcs "$BENCH_DIR/libasmhttp.a" "$BENCH_DIR/asmhttp.o"
+echo "==> Building uhttp library..."
+as -o "$BENCH_DIR/uhttp.o" "$ROOT_DIR/uhttp.s"
+ar rcs "$BENCH_DIR/libuhttp.a" "$BENCH_DIR/uhttp.o"
 
 run_bench() {
     local target="$1"
@@ -58,7 +58,7 @@ fi
 if has_cmd as && has_cmd ld; then
     echo "==> [ASM] Compiling and running..."
     as -o "$BENCH_DIR/app_asm.o" "$CODE_DIR/main.s"
-    ld -s -n --no-warn-rwx-segments -o "$BENCH_DIR/bin_asm" "$BENCH_DIR/app_asm.o" "$BENCH_DIR/libasmhttp.a"
+    ld -s -n --no-warn-rwx-segments -o "$BENCH_DIR/bin_asm" "$BENCH_DIR/app_asm.o" "$BENCH_DIR/libuhttp.a"
     run_bench "asm"
 else
     echo "[!] Skipping ASM: 'as' or 'ld' not found in PATH."
@@ -69,25 +69,14 @@ fi
 # ==============================================================================
 if has_cmd gcc; then
     echo "==> [C] Compiling with gcc and running..."
-    gcc -O3 -nostdlib -o "$BENCH_DIR/bin_c" "$CODE_DIR/main.c" "$BENCH_DIR/libasmhttp.a"
+    gcc -O3 -nostdlib -o "$BENCH_DIR/bin_c" "$CODE_DIR/main.c" "$BENCH_DIR/libuhttp.a"
     run_bench "c"
 elif has_cmd clang; then
     echo "==> [C] Compiling with clang and running..."
-    clang -O3 -nostdlib -o "$BENCH_DIR/bin_c" "$CODE_DIR/main.c" "$BENCH_DIR/libasmhttp.a"
+    clang -O3 -nostdlib -o "$BENCH_DIR/bin_c" "$CODE_DIR/main.c" "$BENCH_DIR/libuhttp.a"
     run_bench "c"
 else
     echo "[!] Skipping C: neither 'gcc' nor 'clang' found in PATH."
-fi
-
-# ==============================================================================
-# 3. Zig Target (requires: zig)
-# ==============================================================================
-if has_cmd zig; then
-    echo "==> [Zig] Compiling and running..."
-    zig build-exe -O ReleaseFast "$CODE_DIR/main.zig" -femit-bin="$BENCH_DIR/bin_zig" "$BENCH_DIR/libasmhttp.a" --libc
-    run_bench "zig"
-else
-    echo "[!] Skipping Zig: 'zig' not found in PATH."
 fi
 
 # Only patch README if results were recorded
